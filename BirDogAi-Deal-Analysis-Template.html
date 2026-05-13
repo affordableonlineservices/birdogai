@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BirDogAi Deal Analysis — [Property Address]</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #fdfcf8;
+    color: #172d4a;
+    line-height: 1.55;
+    font-size: 11pt;
+  }
+  .page {
+    max-width: 8.5in;
+    margin: 0 auto;
+    padding: 0.6in 0.7in;
+    background: #fdfcf8;
+  }
+  h1, h2, h3 { font-family: 'Playfair Display', serif; color: #172d4a; }
+  h1 { font-size: 28pt; line-height: 1.1; margin-bottom: 4pt; font-weight: 700; }
+  h2 { font-size: 16pt; margin: 22pt 0 8pt; padding-bottom: 4pt; border-bottom: 2px solid #c9a961; font-weight: 600; }
+  h3 { font-size: 12pt; font-family: 'Inter', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #c9a961; margin: 14pt 0 6pt; }
+  p { margin-bottom: 8pt; }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #172d4a;
+    padding-bottom: 14pt;
+    margin-bottom: 18pt;
+  }
+  .brand { font-family: 'Playfair Display', serif; font-size: 22pt; font-weight: 700; color: #172d4a; }
+  .brand-sub { font-size: 9pt; color: #6b7280; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2pt; }
+  .meta { text-align: right; font-size: 9pt; color: #6b7280; }
+  .meta strong { color: #172d4a; display: block; font-size: 10pt; }
+
+  /* Verdict box */
+  .verdict {
+    background: #172d4a;
+    color: #fdfcf8;
+    padding: 18pt 22pt;
+    border-radius: 4pt;
+    margin: 14pt 0 8pt;
+  }
+  .verdict-tag {
+    display: inline-block;
+    background: #c9a961;
+    color: #172d4a;
+    padding: 4pt 12pt;
+    border-radius: 3pt;
+    font-size: 10pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8pt;
+  }
+  .verdict-headline { font-family: 'Playfair Display', serif; font-size: 18pt; line-height: 1.2; margin-bottom: 6pt; }
+  .verdict-num { font-size: 11pt; opacity: 0.85; }
+
+  /* Number grid */
+  .num-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10pt;
+    margin: 12pt 0;
+  }
+  .num-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 4pt;
+    padding: 12pt;
+  }
+  .num-label { font-size: 8pt; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; margin-bottom: 4pt; font-weight: 600; }
+  .num-value { font-family: 'Playfair Display', serif; font-size: 18pt; font-weight: 700; color: #172d4a; }
+  .num-sub { font-size: 9pt; color: #6b7280; margin-top: 2pt; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 8pt 0; font-size: 10pt; }
+  th { text-align: left; padding: 8pt 10pt; background: #172d4a; color: #fdfcf8; font-weight: 600; text-transform: uppercase; font-size: 9pt; letter-spacing: 0.04em; }
+  td { padding: 7pt 10pt; border-bottom: 1px solid #e5e7eb; }
+  tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tfoot td { font-weight: 700; background: #f5f1e8; border-top: 2px solid #c9a961; }
+
+  /* Risk/opportunity columns */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16pt; margin: 8pt 0; }
+  .col-box { padding: 12pt 14pt; border-radius: 4pt; }
+  .col-box.risk { background: #fef2f2; border-left: 3px solid #dc2626; }
+  .col-box.opp { background: #f0fdf4; border-left: 3px solid #16a34a; }
+  .col-box h4 { font-size: 10pt; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6pt; }
+  .col-box.risk h4 { color: #dc2626; }
+  .col-box.opp h4 { color: #16a34a; }
+  .col-box ul { margin-left: 14pt; font-size: 10pt; }
+  .col-box li { margin-bottom: 4pt; }
+
+  /* Recommended offer block */
+  .offer-block {
+    background: #f5f1e8;
+    border: 2px solid #c9a961;
+    border-radius: 4pt;
+    padding: 16pt 20pt;
+    margin: 10pt 0;
+  }
+  .offer-amount { font-family: 'Playfair Display', serif; font-size: 26pt; font-weight: 700; color: #172d4a; }
+  .offer-label { font-size: 9pt; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; }
+  .offer-rationale { margin-top: 8pt; font-size: 10pt; }
+
+  /* Footer */
+  .footer {
+    margin-top: 28pt;
+    padding-top: 14pt;
+    border-top: 1px solid #e5e7eb;
+    font-size: 9pt;
+    color: #6b7280;
+    display: flex;
+    justify-content: space-between;
+  }
+  .footer strong { color: #172d4a; }
+
+  .placeholder { color: #c9a961; font-style: italic; background: #fdf6e3; padding: 1px 4px; border-radius: 2px; }
+  .instruction { font-size: 9pt; color: #c9a961; font-style: italic; margin: 4pt 0 8pt; padding-left: 8pt; border-left: 2px solid #c9a961; }
+
+  @media print {
+    body { background: #fdfcf8; }
+    .page { padding: 0.4in 0.5in; }
+    h2 { page-break-after: avoid; }
+    table, .num-grid, .offer-block, .verdict { page-break-inside: avoid; }
+    .instruction, .placeholder { color: #6b7280; background: transparent; font-style: normal; }
+  }
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-S90D3F1NPV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-S90D3F1NPV');
+</script>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="brand">BirDogAi</div>
+      <div class="brand-sub">Deal Analysis Report</div>
+    </div>
+    <div class="meta">
+      <strong>Prepared for: <span class="placeholder">[Investor Name]</span></strong>
+      <span class="placeholder">[Date]</span><br>
+      Report ID: <span class="placeholder">[BD-YYYY-NNNN]</span>
+    </div>
+  </div>
+
+  <!-- PROPERTY HEADER -->
+  <h1><span class="placeholder">[Property Street Address]</span></h1>
+  <p style="font-size: 11pt; color: #6b7280;">
+    <span class="placeholder">[City, State ZIP]</span> · <span class="placeholder">[Beds]BR / [Baths]BA</span> · <span class="placeholder">[SqFt] sqft</span> · <span class="placeholder">[Lot Size]</span> · Built <span class="placeholder">[Year]</span>
+  </p>
+
+  <!-- VERDICT -->
+  <div class="verdict">
+    <div class="verdict-tag"><span class="placeholder">[GO / CAUTION / WALK]</span></div>
+    <div class="verdict-headline"><span class="placeholder">[One-line verdict — e.g., "Solid fix-and-flip with $48K projected profit at the recommended offer."]</span></div>
+    <div class="verdict-num">Asking <span class="placeholder">$XXX,XXX</span> · Recommended offer <span class="placeholder">$XXX,XXX</span> · Projected profit <span class="placeholder">$XX,XXX</span></div>
+  </div>
+
+  <p class="instruction">VERDICT GUIDE: GO = profit clears your hurdle even at -10% ARV. CAUTION = pencils only at asking ARV, no margin for surprises. WALK = doesn't pencil even with optimistic numbers.</p>
+
+  <!-- KEY NUMBERS -->
+  <h2>The Numbers</h2>
+  <div class="num-grid">
+    <div class="num-card">
+      <div class="num-label">ARV</div>
+      <div class="num-value">$<span class="placeholder">XXX,XXX</span></div>
+      <div class="num-sub"><span class="placeholder">[+/-X% vs comps]</span></div>
+    </div>
+    <div class="num-card">
+      <div class="num-label">Repair Budget</div>
+      <div class="num-value">$<span class="placeholder">XX,XXX</span></div>
+      <div class="num-sub"><span class="placeholder">[Cosmetic / Medium / Heavy]</span></div>
+    </div>
+    <div class="num-card">
+      <div class="num-label">All-In Cost</div>
+      <div class="num-value">$<span class="placeholder">XXX,XXX</span></div>
+      <div class="num-sub">Purchase + repairs + carry</div>
+    </div>
+    <div class="num-card">
+      <div class="num-label">Projected Profit</div>
+      <div class="num-value">$<span class="placeholder">XX,XXX</span></div>
+      <div class="num-sub">After all costs &amp; sale</div>
+    </div>
+  </div>
+
+  <!-- ARV ANALYSIS -->
+  <h2>ARV Analysis</h2>
+  <p>BirDog pulled <span class="placeholder">[N]</span> comparable sales within <span class="placeholder">[X]</span> miles, sold in the last <span class="placeholder">[X]</span> days, matching bed/bath count and within ±20% sqft.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th class="num">Distance</th>
+        <th class="num">SqFt</th>
+        <th class="num">$/SqFt</th>
+        <th class="num">Sold Price</th>
+        <th class="num">Sold Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="placeholder">[Comp 1 Address]</span></td><td class="num"><span class="placeholder">0.X mi</span></td><td class="num"><span class="placeholder">X,XXX</span></td><td class="num">$<span class="placeholder">XXX</span></td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td class="num"><span class="placeholder">[Date]</span></td></tr>
+      <tr><td><span class="placeholder">[Comp 2 Address]</span></td><td class="num"><span class="placeholder">0.X mi</span></td><td class="num"><span class="placeholder">X,XXX</span></td><td class="num">$<span class="placeholder">XXX</span></td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td class="num"><span class="placeholder">[Date]</span></td></tr>
+      <tr><td><span class="placeholder">[Comp 3 Address]</span></td><td class="num"><span class="placeholder">0.X mi</span></td><td class="num"><span class="placeholder">X,XXX</span></td><td class="num">$<span class="placeholder">XXX</span></td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td class="num"><span class="placeholder">[Date]</span></td></tr>
+      <tr><td><span class="placeholder">[Comp 4 Address]</span></td><td class="num"><span class="placeholder">0.X mi</span></td><td class="num"><span class="placeholder">X,XXX</span></td><td class="num">$<span class="placeholder">XXX</span></td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td class="num"><span class="placeholder">[Date]</span></td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td colspan="3"><strong>Median $/sqft → ARV estimate</strong></td><td class="num">$<span class="placeholder">XXX</span></td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td></td></tr>
+    </tfoot>
+  </table>
+
+  <p class="instruction">SOURCE NOTE: Pull comps from Zillow Recently Sold + Redfin + Maricopa/Pima County Assessor. Filter to last 90 days. Adjust for condition (this property's renovated state vs. each comp's).</p>
+
+  <!-- REPAIR BUDGET -->
+  <h2>Repair Budget</h2>
+  <p>Repair scope estimated from listing photos and typical Arizona market rates. Itemized below.</p>
+
+  <table>
+    <thead><tr><th>Scope Item</th><th>Notes</th><th class="num">Cost</th></tr></thead>
+    <tbody>
+      <tr><td>Roof</td><td><span class="placeholder">[Patch / Replace / N/A]</span></td><td class="num">$<span class="placeholder">X,XXX</span></td></tr>
+      <tr><td>HVAC</td><td><span class="placeholder">[Service / Replace / N/A]</span></td><td class="num">$<span class="placeholder">X,XXX</span></td></tr>
+      <tr><td>Kitchen</td><td><span class="placeholder">[Cosmetic / Full reno]</span></td><td class="num">$<span class="placeholder">XX,XXX</span></td></tr>
+      <tr><td>Bathrooms (×<span class="placeholder">N</span>)</td><td><span class="placeholder">[Scope]</span></td><td class="num">$<span class="placeholder">X,XXX</span></td></tr>
+      <tr><td>Flooring</td><td><span class="placeholder">[LVP / tile / hardwood, X sqft]</span></td><td class="num">$<span class="placeholder">X,XXX</span></td></tr>
+      <tr><td>Paint (interior + exterior)</td><td><span class="placeholder">[Notes]</span></td><td class="num">$<span class="placeholder">X,XXX</span></td></tr>
+      <tr><td>Landscaping / curb appeal</td><td><span class="placeholder">[Notes]</span></td><td class="num">$<span class="placeholder">X,XXX</span></td></tr>
+      <tr><td>Permits + contingency (10%)</td><td>Standard buffer</td><td class="num">$<span class="placeholder">X,XXX</span></td></tr>
+    </tbody>
+    <tfoot><tr><td colspan="2"><strong>TOTAL REPAIR BUDGET</strong></td><td class="num">$<span class="placeholder">XX,XXX</span></td></tr></tfoot>
+  </table>
+
+  <!-- PRO FORMA -->
+  <h2>Pro Forma</h2>
+  <table>
+    <tbody>
+      <tr><td><strong>Purchase price (recommended offer)</strong></td><td class="num">$<span class="placeholder">XXX,XXX</span></td></tr>
+      <tr><td>Closing costs (buy side, ~2%)</td><td class="num">$<span class="placeholder">X,XXX</span></td></tr>
+      <tr><td>Repair budget (from above)</td><td class="num">$<span class="placeholder">XX,XXX</span></td></tr>
+      <tr><td>Holding costs (<span class="placeholder">X</span> months × $<span class="placeholder">X,XXX</span>/mo)</td><td class="num">$<span class="placeholder">X,XXX</span></td></tr>
+      <tr><td>Selling costs (commission + closing, ~7%)</td><td class="num">$<span class="placeholder">XX,XXX</span></td></tr>
+      <tr><td><strong>Total all-in cost</strong></td><td class="num"><strong>$<span class="placeholder">XXX,XXX</span></strong></td></tr>
+      <tr style="background: #f5f1e8;"><td><strong>ARV (sale price)</strong></td><td class="num"><strong>$<span class="placeholder">XXX,XXX</span></strong></td></tr>
+      <tr style="background: #f5f1e8;"><td><strong>Projected profit</strong></td><td class="num"><strong>$<span class="placeholder">XX,XXX</span></strong></td></tr>
+      <tr style="background: #f5f1e8;"><td><strong>Profit margin (ROI on cash)</strong></td><td class="num"><strong><span class="placeholder">XX</span>%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <!-- STRESS TESTS -->
+  <h2>Stress Tests</h2>
+  <table>
+    <thead><tr><th>Scenario</th><th class="num">ARV</th><th class="num">Profit</th><th class="num">Margin</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>Base case</td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td class="num">$<span class="placeholder">XX,XXX</span></td><td class="num"><span class="placeholder">XX%</span></td><td><span class="placeholder">[GO]</span></td></tr>
+      <tr><td>ARV -5%</td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td class="num">$<span class="placeholder">XX,XXX</span></td><td class="num"><span class="placeholder">XX%</span></td><td><span class="placeholder">[GO]</span></td></tr>
+      <tr><td>ARV -10%</td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td class="num">$<span class="placeholder">XX,XXX</span></td><td class="num"><span class="placeholder">XX%</span></td><td><span class="placeholder">[GO/CAUTION]</span></td></tr>
+      <tr><td>Repairs +20%</td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td class="num">$<span class="placeholder">XX,XXX</span></td><td class="num"><span class="placeholder">XX%</span></td><td><span class="placeholder">[GO/CAUTION]</span></td></tr>
+      <tr><td>Hold +3 months</td><td class="num">$<span class="placeholder">XXX,XXX</span></td><td class="num">$<span class="placeholder">XX,XXX</span></td><td class="num"><span class="placeholder">XX%</span></td><td><span class="placeholder">[GO/CAUTION]</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- MARKET CONTEXT -->
+  <h2>Market Context</h2>
+  <h3>Neighborhood snapshot</h3>
+  <p><span class="placeholder">[2-3 sentences on neighborhood: median sale price, days on market, price trend YoY, school rating, any major demand drivers — new employer, transit, etc.]</span></p>
+
+  <h3>Demand signals</h3>
+  <p><span class="placeholder">[1-2 sentences: rent growth, population growth, what's pulling buyers to this zip.]</span></p>
+
+  <!-- RISKS & OPPORTUNITIES -->
+  <h2>Risks &amp; Opportunities</h2>
+  <div class="two-col">
+    <div class="col-box risk">
+      <h4>⚠ Risks</h4>
+      <ul>
+        <li><span class="placeholder">[Specific risk #1 — e.g., permit issue, foundation crack visible in photos, slow comps]</span></li>
+        <li><span class="placeholder">[Specific risk #2]</span></li>
+        <li><span class="placeholder">[Specific risk #3]</span></li>
+      </ul>
+    </div>
+    <div class="col-box opp">
+      <h4>✓ Opportunities</h4>
+      <ul>
+        <li><span class="placeholder">[Specific opportunity #1 — e.g., motivated seller, ADU potential, below-market rents]</span></li>
+        <li><span class="placeholder">[Specific opportunity #2]</span></li>
+        <li><span class="placeholder">[Specific opportunity #3]</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RECOMMENDED OFFER -->
+  <h2>Recommended Offer</h2>
+  <div class="offer-block">
+    <div class="offer-label">BirDog recommends an offer of</div>
+    <div class="offer-amount">$<span class="placeholder">XXX,XXX</span></div>
+    <div class="offer-rationale">
+      <strong>Rationale:</strong> <span class="placeholder">[2-3 sentences: what the offer is anchored to — comp median, MAO formula, distressed discount — and why this number leaves enough margin for the GO verdict to hold even under stress test scenarios. Reference one or two specific data points.]</span>
+    </div>
+  </div>
+
+  <h3>Suggested negotiation moves</h3>
+  <p><span class="placeholder">[1-2 sentences: specific levers to use — inspection contingency, fast close, all-cash, etc. based on what the listing/situation suggests will matter to this seller.]</span></p>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div>
+      <strong>BirDogAi</strong><br>
+      Your AI bird dog never sleeps.<br>
+      birdogai.com
+    </div>
+    <div style="text-align: right;">
+      <strong>Questions?</strong><br>
+      affordablepropertiestoday@gmail.com<br>
+      (702) 337-3494
+    </div>
+  </div>
+
+  <p style="font-size: 8pt; color: #9ca3af; margin-top: 14pt; text-align: center;">
+    This analysis is generated for informational purposes only and does not constitute investment advice. All figures are estimates based on publicly available data and the photos/details provided. Independently verify before making purchase decisions.
+  </p>
+
+</div>
+</body>
+</html>
